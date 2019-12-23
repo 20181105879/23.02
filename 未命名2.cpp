@@ -1,111 +1,100 @@
 #include <iostream>
-#include <queue>
-#include <stack>
+#include <string.h>
 using namespace std;
-int s1[15];
-int s2[15];
-int s[15][15];
-int  n,m;
-void bfs(int start)
-{
-	queue<int> q;
-	int t;
-	q.push(start);
-	s1[start]=1;
-	cout<<"{ ";
-	t=q.front();
-	while(!q.empty())
-	{
-		cout<<q.front()<<" ";
-		for(int i=0;i<n;i++)
-		{
-			if(s[q.front()][i]==1 && s1[i]==0)
-			{
-				q.push(i);
-				s1[i]=1;
-			}
-
-		}
-		q.pop();
-		t=q.front();
-	}
-	cout<<"}"<<endl;
-
-}
-void dfs(int start)
-{
-	stack<int> ss;
-	ss.push(start);
-	s2[start]=1;
-    cout<<"{ ";
-    cout<<ss.top()<<" ";
-    int t;
-	t=ss.top();
-    bool is_push ;//= false;
-	while(!ss.empty())
-	{
-//		cout<<ss.top()<<" ";
-        is_push = false;
-		for(int i=0;i<n;i++)
-		{
-			if(s[t][i]==1 && s2[i]==0)
-			{
-				ss.push(i);
-				s2[i]=1;
-				cout<<i<<" ";
-				t=ss.top();
-				is_push = true;	
-				break;
-			}
-
-		}
-		if(!is_push)
-		{
-			
-			ss.pop();
-			if(ss.empty())
-			{
-				break;
-			}
-			t=ss.top();
-		}
-		
-	}
-	cout<<"}"<<endl;
-}
+int s[150][150];
+int ss[150];
 int main()
 {
-
+	long n,m;
 	cin>>n>>m;
+	int t1,t2,l;
+	
+
+    for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=n;j++)
+		{
+			
+				s[i][j]=1000;
+			
+		}
+	}
+	
+	
 	for(int i=0;i<m;i++)
 	{
-		int r,l;
-		cin>>r>>l;
-		s[r][l]=1;
-		s[l][r]=1;	
+		cin>>t1>>t2>>l;
+		s[t1][t2]=l;
+		s[t2][t1]=l;
 	}
-		for(int i=0;i<n;i++)
+	
+	
+	for(int i=1;i<=n;i++)
 	{
-		if(s2[i]==1)
-		{
-			continue;
-		}
-		else
-		{
-			dfs(i);
-		}
-	}
-	for(int i=0;i<n;i++)
-	{
-		if(s1[i]==1)
-		{
-			continue;
-		}
-		else
-		{
-			bfs(i);
-		}
-	}
-	return  0;
- } 
+		s[i][i]=0; 
+	} 
 
+	for(int k=1;k<=n;k++)
+	{
+		
+		for(int i=1;i<=n;i++)
+		{
+			for(int j=1;j<=n;j++)
+			{
+				if(s[i][k]+s[k][j]<s[i][j] && s[i][k]+s[k][j]>0)
+				{
+					
+					s[i][j]=s[i][k]+s[k][j];
+
+
+				}
+			}
+		}
+	}
+
+	for(int i=1;i<=n;i++)
+	{
+		ss[i]=-1;
+		for(int j=1;j<=n;j++)
+		{
+			if(s[i][j]>=ss[i])
+			{
+				ss[i]=s[i][j];
+			}
+		}
+
+	}
+		for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<n;j++)
+		{
+			cout<<s[i][j]<<" ";
+		}
+		cout<<endl;
+
+	}
+
+	
+	int len=ss[1];
+	int tt=1;
+	for(int i=1;i<=n;i++) 
+	{
+		if(ss[i]<len)
+		{
+			len=ss[i];
+			tt=i;
+		}
+	}
+	
+	
+	
+	
+	
+    if(len>=500)
+    {
+    	cout<<"0"<<endl;
+	}
+	cout<<tt<<" "<<len;
+
+	return 0;
+ } 
